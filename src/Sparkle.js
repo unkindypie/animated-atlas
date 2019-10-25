@@ -3,7 +3,7 @@ import loader from './pixi/loader';
 import {ShockwaveFilter} from '@pixi/filter-shockwave';
 
 export default class Sparkle extends PIXI.Sprite {
-    static animationRate = 0.02;
+    static animationRate = 0.015;
     static deathBreakdown = 1;
     dead = false;
     waveShader = null;
@@ -32,5 +32,12 @@ export default class Sparkle extends PIXI.Sprite {
             this.cityPosition.exists = false;
 
         }
+    }
+    static setNormalState(){
+        Sparkle.animationRate = 0.015;
+        Sparkle.deathBreakdown = 1;
+    }
+    static setMouseMoveState() {
+        Sparkle.deathBreakdown = 2;
     }
 }

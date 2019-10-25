@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import random from 'random';
-import {ShockwaveFilter} from '@pixi/filter-shockwave';
 
 import app from './pixi/pixiapp';
 import loader, { loadResourses } from './pixi/loader';
@@ -12,23 +11,13 @@ import Mouse from './utils/Mouse';
 const onLoad = () => {
     let sparkles = [];
     const sparkleSpawnRate = { max: 3, min: 1 };
-    let spawnDelta = 10;
+    let spawnDelta = 40;
     let currentSpawnDeltaTime = 0;
 
     const container = new PIXI.Container();
     container.filters = [];
     container.addChild(new PIXI.Sprite(loader.resources['map'].texture));
     app.stage.addChild(container);
-
-
-    // const filter = new ShockwaveFilter([app.view.width/2 + 200, app.view.height/2], {
-    //     wavelength: 37,
-    //     amplitude: 16,
-    //     brightness: 1,
-    //     radius: 194.5,
-    // }, 0.2);
-
-    //container.filters.push(filter);
 
     const updateSparkles = (delta) => {
         for (let i in sparkles) {
@@ -61,37 +50,22 @@ const onLoad = () => {
         }
     }
 
-    const setOnMouseMoveMode = ()=>{
-        Sparkle.animationRate = 0.04;
-        Sparkle.deathBreakdown = 2.5;
-    }
-
-    const setNormalMode = ()=>{
-        Sparkle.animationRate = 0.02;
-        Sparkle.deathBreakdown = 1;
-    }
-
-    
-
-    // const container = new PIXI.Container();
-    // app.stage.addChild(container);
-
-    // let filter = new PIXI.filters.DisplacementFilter(mapSprite);
-    // filter.
-    // container.filters = [filter];
-
-
-
     app.ticker.add((delta) => {
         currentSpawnDeltaTime += delta;
 
         Mouse.update(delta);
         
         if(Mouse.isMoving) {
-            setOnMouseMoveMode();
+            Sparkle.setMouseMoveState();
+            spawnDelta = 25;
+            sparkleSpawnRate.max = 3;
+            sparkleSpawnRate.min = 1;
         }
         else{
-            setNormalMode();
+            Sparkle.setNormalState();
+            spawnDelta = 40;
+            sparkleSpawnRate.max = 2;
+            sparkleSpawnRate.min = 0;
         }
 
         updateSparkles(delta);
