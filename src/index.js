@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import random from 'random';
+import {ShockwaveFilter} from '@pixi/filter-shockwave';
 
 import app from './pixi/pixiapp';
 import loader, { loadResourses } from './pixi/loader';
@@ -14,6 +15,21 @@ const onLoad = () => {
     let spawnDelta = 10;
     let currentSpawnDeltaTime = 0;
 
+    const container = new PIXI.Container();
+    container.filters = [];
+    container.addChild(new PIXI.Sprite(loader.resources['map'].texture));
+    app.stage.addChild(container);
+
+
+    // const filter = new ShockwaveFilter([app.view.width/2 + 200, app.view.height/2], {
+    //     wavelength: 37,
+    //     amplitude: 16,
+    //     brightness: 1,
+    //     radius: 194.5,
+    // }, 0.2);
+
+    //container.filters.push(filter);
+
     const updateSparkles = (delta) => {
         for (let i in sparkles) {
             sparkles[i].update(delta);
@@ -21,7 +37,8 @@ const onLoad = () => {
 
         sparkles = sparkles.filter((sparkle) => {
             if(sparkle.dead){
-                app.stage.removeChild(sparkle)
+                container.filters.filter((filter)=> filter != sparkle.waveShader) //удаляю фильтр спаркла с контейнера
+                container.removeChild(sparkle) //удаляю сам спаркл
                 return false;
             }
             return true;
@@ -38,7 +55,9 @@ const onLoad = () => {
                 return;
             }
             sparkles.push(sparkle);
-            app.stage.addChild(sparkle);
+
+            container.addChild(sparkle);
+            container.filters.push(sparkle.waveShader);
         }
     }
 
@@ -52,7 +71,7 @@ const onLoad = () => {
         Sparkle.deathBreakdown = 1;
     }
 
-    const mapSprite = new PIXI.Sprite(loader.resources['map'].texture);
+    
 
     // const container = new PIXI.Container();
     // app.stage.addChild(container);
@@ -61,7 +80,7 @@ const onLoad = () => {
     // filter.
     // container.filters = [filter];
 
-    app.stage.addChild(mapSprite);
+
 
     app.ticker.add((delta) => {
         currentSpawnDeltaTime += delta;
