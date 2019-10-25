@@ -7,6 +7,7 @@ export default class Sparkle extends PIXI.Sprite {
     static deathBreakdown = 1;
     static useShader = false;
     dead = false;
+    animationProgress = 0;
     waveShader = null;
     
 
@@ -22,19 +23,23 @@ export default class Sparkle extends PIXI.Sprite {
                 amplitude: 3,
                 brightness: 1,
                 radius: 50,//194.5,
-            }, 0.04);
+            }, 0.05);
         }
         
     }
     update(delta){
         let animationOffset = delta * Sparkle.animationRate;
         if(this.waveShader) {
-            this.waveShader.time += animationOffset / 7;
+            this.waveShader.time += animationOffset / 8;
+        }
+        this.animationProgress += animationOffset;
+        if(this.animationProgress >= Sparkle.deathBreakdown) {
+            animationOffset *= -1;
         }
         this.scale.y += animationOffset;
         this.scale.x += animationOffset;
 
-        if(this.scale.x >= Sparkle.deathBreakdown){
+        if(this.animationProgress >= Sparkle.deathBreakdown * 1.6){
             this.dead = true;
             this.cityPosition.exists = false;
 
