@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import random from 'random';
+import loader from './pixi/loader';
 
 class CityPosition extends PIXI.Point {
     constructor(x, y){
@@ -8,15 +9,14 @@ class CityPosition extends PIXI.Point {
     }
 };
 
-//рандомные координаты с материков. Это не реальные города.
-const cityPositions = [
-    new CityPosition(1186, 313),
-    new CityPosition(1135, 230),
-    new CityPosition(1076, 300),
-    new CityPosition(664, 318),
-    new CityPosition(767, 464),
-    new CityPosition(996, 266)
-];
+const cityPositions = [];
+
+export const loadCityPositions = () => {
+    const cities = loader.resources['cities'].data;
+    for(let i in cities.points) {
+        cityPositions.push(new CityPosition(cities.points[i][0], cities.points[i][1]));
+    }
+}
 
 //возвращает координату рандомного незанятого города, если такого нет, кинет исключение
 export const findFreeCity = () => {
@@ -36,6 +36,10 @@ export const findFreeCity = () => {
         return freeCities[0];
     }
     throw new Error('All cities are taken :c');
+}
+
+export const findCitiesAroundMouse = (mousePostion) => {
+    
 }
 
 export default cityPositions;

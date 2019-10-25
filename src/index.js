@@ -3,12 +3,14 @@ import random from 'random';
 
 import app from './pixi/pixiapp';
 import loader, { loadResourses } from './pixi/loader';
-import cityPositions, { findFreeCity } from './cityPositions';
+import { findFreeCity, loadCityPositions } from './cityPositions';
 import Sparkle from './Sparkle';
 import Mouse from './utils/Mouse';
 
 //будет вызвана, когда pixi загрузит все ассеты
 const onLoad = () => {
+    loadCityPositions();
+
     let sparkles = [];
     const sparkleSpawnRate = { max: 3, min: 1 };
     let spawnDelta = 40;

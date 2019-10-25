@@ -4,8 +4,9 @@ const loader = app.loader;
 
 const loadResourses = (callback)=>{
     app.loader
-        .add('map', 'assets/map_bg.png')
+        .add('map', 'assets/map_bg_sparkl.png')
         .add('sparkle', 'assets/sparkle.png')
+        .add('cities', 'assets/cities.json')
         .load(callback);
 }
 

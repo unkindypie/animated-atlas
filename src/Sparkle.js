@@ -12,10 +12,10 @@ export default class Sparkle extends PIXI.Sprite {
         super(loader.resources['sparkle'].texture);
 
         this.cityPosition = this.position = cityPosition;
-        this.anchor.x = this.anchor.y = 0.5;
+        this.anchor.x = this.anchor.y = 0.4;
         this.scale.x = this.scale.y = 0.1;
         this.waveShader = new ShockwaveFilter(cityPosition, {
-            wavelength: 100,
+            wavelength: 70,
             amplitude: 3,
             brightness: 1,
             radius: 50,//194.5,
@@ -23,7 +23,7 @@ export default class Sparkle extends PIXI.Sprite {
     }
     update(delta){
         let animationOffset = delta * Sparkle.animationRate;
-        this.waveShader.time += animationOffset / 4;
+        this.waveShader.time += animationOffset / 7;
         this.scale.y += animationOffset;
         this.scale.x += animationOffset;
 
