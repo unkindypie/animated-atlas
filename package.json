@@ -6,7 +6,9 @@
   "scripts": {
     "build:dev": "webpack",
     "build:prod": "webpack -p --env production",
-    "dev-server": "webpack-dev-server"
+    "dev-server": "webpack-dev-server",
+    "start": "node server/app.js",
+    "heroku-postbuild": "npm run build:prod"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "@pixi/filter-shockwave": "^3.0.3",
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.6",
+    "express": "^4.17.1",
     "pixi.js": "^5.1.5",
     "random": "^2.1.1",
     "webpack": "^4.41.2",
