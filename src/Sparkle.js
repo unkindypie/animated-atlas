@@ -3,10 +3,12 @@ import loader from './pixi/loader';
 import {ShockwaveFilter} from '@pixi/filter-shockwave';
 
 export default class Sparkle extends PIXI.Sprite {
-    static animationRate = 0.015;
+    static animationRate = 0.008;
     static deathBreakdown = 1;
+    static useShader = false;
     dead = false;
     waveShader = null;
+    
 
     constructor(cityPosition){
         super(loader.resources['sparkle'].texture);
@@ -14,16 +16,21 @@ export default class Sparkle extends PIXI.Sprite {
         this.cityPosition = this.position = cityPosition;
         this.anchor.x = this.anchor.y = 0.4;
         this.scale.x = this.scale.y = 0.1;
-        this.waveShader = new ShockwaveFilter(cityPosition, {
-            wavelength: 70,
-            amplitude: 3,
-            brightness: 1,
-            radius: 50,//194.5,
-        }, 0);
+        if(Sparkle.useShader){
+            this.waveShader = new ShockwaveFilter(cityPosition, {
+                wavelength: 70,
+                amplitude: 3,
+                brightness: 1,
+                radius: 50,//194.5,
+            }, 0.04);
+        }
+        
     }
     update(delta){
         let animationOffset = delta * Sparkle.animationRate;
-        this.waveShader.time += animationOffset / 7;
+        if(this.waveShader) {
+            this.waveShader.time += animationOffset / 7;
+        }
         this.scale.y += animationOffset;
         this.scale.x += animationOffset;
 
@@ -34,10 +41,12 @@ export default class Sparkle extends PIXI.Sprite {
         }
     }
     static setNormalState(){
-        Sparkle.animationRate = 0.015;
+        Sparkle.animationRate = 0.008;
         Sparkle.deathBreakdown = 1;
+        Sparkle.useShader = false;
     }
     static setMouseMoveState() {
-        Sparkle.deathBreakdown = 2;
+        Sparkle.deathBreakdown = 1.5;
+        Sparkle.useShader = true;
     }
 }

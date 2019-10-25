@@ -28,7 +28,7 @@ const onLoad = () => {
 
         sparkles = sparkles.filter((sparkle) => {
             if(sparkle.dead){
-                container.filters.filter((filter)=> filter != sparkle.waveShader) //удаляю фильтр спаркла с контейнера
+                if(sparkle.waveShader)container.filters.filter((filter)=> filter != sparkle.waveShader) //удаляю фильтр спаркла с контейнера
                 container.removeChild(sparkle) //удаляю сам спаркл
                 return false;
             }
@@ -48,7 +48,9 @@ const onLoad = () => {
             sparkles.push(sparkle);
 
             container.addChild(sparkle);
-            container.filters.push(sparkle.waveShader);
+            if(sparkle.waveShader){
+                container.filters.push(sparkle.waveShader);
+            }
         }
     }
 
@@ -60,14 +62,14 @@ const onLoad = () => {
         if(Mouse.isMoving) {
             Sparkle.setMouseMoveState();
             spawnDelta = 25;
-            sparkleSpawnRate.max = 3;
-            sparkleSpawnRate.min = 1;
+            sparkleSpawnRate.max = 9;
+            sparkleSpawnRate.min = 2;
         }
         else{
             Sparkle.setNormalState();
             spawnDelta = 40;
-            sparkleSpawnRate.max = 2;
-            sparkleSpawnRate.min = 0;
+            sparkleSpawnRate.max = 6;
+            sparkleSpawnRate.min = 1;
         }
 
         updateSparkles(delta);
