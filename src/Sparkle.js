@@ -20,14 +20,12 @@ export default class Sparkle extends PIXI.Sprite {
          
             this.setMouseMoveState();
         }
-        //else {
-            this.waveShader = new ShockwaveFilter(cityPosition, {
-                wavelength: 20,
-                amplitude: 1,
-                brightness: 1.1,
-                radius: 40,//194.5,
-            }, 0.01);
-        //}
+        this.waveShader = new ShockwaveFilter(cityPosition, {
+            wavelength: 20,
+            amplitude: 1,
+            brightness: 1.1,
+            radius: 40,//194.5,
+        }, 0.01);
     }
     update(delta){
         let animationOffset = delta * this.animationRate;
@@ -40,7 +38,6 @@ export default class Sparkle extends PIXI.Sprite {
         }
         this.scale.y += animationOffset;
         this.scale.x += animationOffset;
-        console.log(this.animationProgress);
         if(this.animationProgress >= this.deathBreakdown * 1.6){
 
             this.dead = true;

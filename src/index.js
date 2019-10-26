@@ -14,28 +14,32 @@ const onLoad = () => {
     let sparkles = [];
     const sparkleSpawnRate = { max: 3, min: 1 };
     let spawnDelta = 40;
-    let currentSpawnDeltaTime = 0;
+    let elapsedBeforeSpawn = 0;
     let mouseSpawnZoneRadius = 70;
 
     const container = new PIXI.Container();
     container.filters = [];
     container.addChild(new PIXI.Sprite(loader.resources['map'].texture));
     app.stage.addChild(container);
-    
+
 
     const updateSparkles = (delta) => {
         for (let i in sparkles) {
             sparkles[i].update(delta);
         };
 
+
         sparkles = sparkles.filter((sparkle) => {
-            if(sparkle.dead){
-                if(sparkle.waveShader)container.filters.filter((filter)=> filter != sparkle.waveShader) //удаляю фильтр спаркла с контейнера
+            if (sparkle.dead) {
+                //удаляю фильтр спаркла с контейнера
+                if (sparkle.waveShader) {
+                    container.filters = container.filters.filter((filter) => filter != sparkle.waveShader)
+                }
                 container.removeChild(sparkle) //удаляю сам спаркл
                 return false;
             }
             return true;
-            
+
         });
     }
 
@@ -50,7 +54,7 @@ const onLoad = () => {
             sparkles.push(sparkle);
 
             container.addChild(sparkle);
-            if(sparkle.waveShader){
+            if (sparkle.waveShader) {
                 container.filters.push(sparkle.waveShader);
             }
         }
@@ -58,41 +62,39 @@ const onLoad = () => {
 
     const spawnSparklesAroundMouse = () => {
         let cities = findCitiesAroundMouse(Mouse.position, mouseSpawnZoneRadius);
-        for(let i in cities){
+        for (let i in cities) {
             const sparkle = new Sparkle(cities[i], true);
             sparkles.push(sparkle);
             container.addChild(sparkle);
-            if(sparkle.waveShader){
+            if (sparkle.waveShader) {
                 container.filters.push(sparkle.waveShader);
             }
         }
     }
 
     app.ticker.add((delta) => {
-        currentSpawnDeltaTime += delta;
+        elapsedBeforeSpawn += delta;
 
         Mouse.update(delta);
-        
-        if(Mouse.isMoving) {
-            //Sparkle.setMouseMoveState();
+
+        if (Mouse.isMoving) {
             spawnDelta = 25;
             sparkleSpawnRate.max = 9;
             sparkleSpawnRate.min = 2;
         }
-        else{
-            //Sparkle.setNormalState();
+        else {
             spawnDelta = 40;
             sparkleSpawnRate.max = 6;
             sparkleSpawnRate.min = 1;
         }
 
         updateSparkles(delta);
-        
+
         spawnSparklesAroundMouse();
 
-        if (currentSpawnDeltaTime >= spawnDelta) {
+        if (elapsedBeforeSpawn >= spawnDelta) {
             spawnSparkles();
-            currentSpawnDeltaTime = 0;
+            elapsedBeforeSpawn = 0;
         }
     })
 }
