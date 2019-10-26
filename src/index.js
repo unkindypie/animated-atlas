@@ -59,7 +59,7 @@ const onLoad = () => {
     const spawnSparklesAroundMouse = () => {
         let cities = findCitiesAroundMouse(Mouse.position, mouseSpawnZoneRadius);
         for(let i in cities){
-            const sparkle = new Sparkle(cities[i]);
+            const sparkle = new Sparkle(cities[i], true);
             sparkles.push(sparkle);
             container.addChild(sparkle);
             if(sparkle.waveShader){
@@ -74,13 +74,13 @@ const onLoad = () => {
         Mouse.update(delta);
         
         if(Mouse.isMoving) {
-            Sparkle.setMouseMoveState();
+            //Sparkle.setMouseMoveState();
             spawnDelta = 25;
             sparkleSpawnRate.max = 9;
             sparkleSpawnRate.min = 2;
         }
         else{
-            Sparkle.setNormalState();
+            //Sparkle.setNormalState();
             spawnDelta = 40;
             sparkleSpawnRate.max = 6;
             sparkleSpawnRate.min = 1;
@@ -88,7 +88,7 @@ const onLoad = () => {
 
         updateSparkles(delta);
         
-        //spawnSparklesAroundMouse();
+        spawnSparklesAroundMouse();
 
         if (currentSpawnDeltaTime >= spawnDelta) {
             spawnSparkles();
