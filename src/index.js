@@ -3,7 +3,7 @@ import random from 'random';
 
 import app from './pixi/pixiapp';
 import loader, { loadResourses } from './pixi/loader';
-import { findFreeCity, loadCityPositions } from './cityPositions';
+import { findFreeCity, loadCityPositions, findCitiesAroundMouse } from './cityPositions';
 import Sparkle from './Sparkle';
 import Mouse from './utils/Mouse';
 
@@ -15,11 +15,13 @@ const onLoad = () => {
     const sparkleSpawnRate = { max: 3, min: 1 };
     let spawnDelta = 40;
     let currentSpawnDeltaTime = 0;
+    let mouseSpawnZoneRadius = 70;
 
     const container = new PIXI.Container();
     container.filters = [];
     container.addChild(new PIXI.Sprite(loader.resources['map'].texture));
     app.stage.addChild(container);
+    
 
     const updateSparkles = (delta) => {
         for (let i in sparkles) {
@@ -54,6 +56,18 @@ const onLoad = () => {
         }
     }
 
+    const spawnSparklesAroundMouse = () => {
+        let cities = findCitiesAroundMouse(Mouse.position, mouseSpawnZoneRadius);
+        for(let i in cities){
+            const sparkle = new Sparkle(cities[i]);
+            sparkles.push(sparkle);
+            container.addChild(sparkle);
+            if(sparkle.waveShader){
+                container.filters.push(sparkle.waveShader);
+            }
+        }
+    }
+
     app.ticker.add((delta) => {
         currentSpawnDeltaTime += delta;
 
@@ -74,6 +88,8 @@ const onLoad = () => {
 
         updateSparkles(delta);
         
+        //spawnSparklesAroundMouse();
+
         if (currentSpawnDeltaTime >= spawnDelta) {
             spawnSparkles();
             currentSpawnDeltaTime = 0;

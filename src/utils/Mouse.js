@@ -1,4 +1,7 @@
+import app from '../pixi/pixiapp';
+
 const mouse = {
+    position: {x:0, y:0},
     isMoving: false,
     updateCounter: 0,
     update(delta){
@@ -8,9 +11,11 @@ const mouse = {
         }
     }
 };
-document.body.onmousemove = () => { 
+app.view.onmousemove = (e) => { 
   mouse.isMoving = true;
   mouse.updateCounter = 0;
+  mouse.position.x = e.clientX;
+  mouse.position.y = e.clientY;
 }
 
 export default mouse;
